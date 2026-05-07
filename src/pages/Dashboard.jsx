@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom'
-import { CATEGORIES, TOOLS, toolsByCategory, getCategory } from '../data/tools'
+import { CATEGORIES, localiseTools, localiseCategories } from '../data/tools'
 import { useWorkspace } from '../contexts/WorkspaceContext'
 import { useAuth } from '../contexts/AuthContext'
+import { useI18n } from '../contexts/I18nContext'
 
 function PinIcon({ filled }) {
   return (
@@ -56,14 +57,14 @@ const CAT_ILLUSTRATIONS = {
 
 function ToolMini({ tool }) {
   const { pinned, togglePinned } = useWorkspace()
-  const cat = getCategory(tool.category)
+  const { t } = useI18n()
   const isPinned = pinned.includes(tool.id)
 
   return (
     <NavLink to={tool.path} className="tool-mini">
       <div className="tool-mini-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-          {cat?.icon}
+          {tool.icon}
         </svg>
       </div>
       <div className="tool-mini-body">
@@ -74,7 +75,7 @@ function ToolMini({ tool }) {
         type="button"
         className={`tool-mini-pin${isPinned ? ' pinned' : ''}`}
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); togglePinned(tool.id) }}
-        aria-label={isPinned ? `Unpin ${tool.label}` : `Pin ${tool.label}`}
+        aria-label={isPinned ? t('common.unpin', { name: tool.label }) : t('common.pin', { name: tool.label })}
       >
         <PinIcon filled={isPinned} />
       </button>
@@ -85,75 +86,63 @@ function ToolMini({ tool }) {
 export default function Dashboard() {
   const { user, userProfile } = useAuth()
   const { pinned } = useWorkspace()
+  const { t } = useI18n()
+
+  const lTools = localiseTools(t)
+  const lCats = localiseCategories(t)
 
   const greeting = (() => {
     const h = new Date().getHours()
-    if (h < 5) return 'Working late'
-    if (h < 12) return 'Good morning'
-    if (h < 18) return 'Good afternoon'
-    return 'Good evening'
+    if (h < 5) return t('dash.greeting.lateNight')
+    if (h < 12) return t('dash.greeting.morning')
+    if (h < 18) return t('dash.greeting.afternoon')
+    return t('dash.greeting.evening')
   })()
 
   const firstName = userProfile?.displayName?.split(' ')[0] || user?.email?.split('@')[0] || 'maker'
-  const pinnedTools = pinned.map(id => TOOLS.find(t => t.id === id)).filter(Boolean)
+  const pinnedTools = pinned.map(id => {
+    const tool = lTools.find(tl => tl.id === id)
+    if (!tool) return null
+    const cat = lCats.find(c => c.id === tool.category)
+    return { ...tool, icon: cat?.icon }
+  }).filter(Boolean)
 
   return (
     <div className="dash">
-      {/* Hero */}
       <div className="dash-hero">
         <h1 className="dash-hero-title">
           {greeting}, <em>{firstName}</em>
         </h1>
         <p className="dash-hero-sub">
-          Pick up where you left off, or explore a category below.
+          {t('dash.heroSub')}
         </p>
       </div>
 
-      {/* Stats strip */}
-      <div className="qstats">
-        <div className="qstat">
-          <span className="qstat-label">Tools</span>
-          <span className="qstat-value">{TOOLS.length}</span>
-        </div>
-        <div className="qstat">
-          <span className="qstat-label">Pinned</span>
-          <span className="qstat-value">{pinnedTools.length}</span>
-        </div>
-        <div className="qstat">
-          <span className="qstat-label">Categories</span>
-          <span className="qstat-value">{CATEGORIES.length}</span>
-        </div>
-        <div className="qstat">
-          <span className="qstat-label">Status</span>
-          <span className="qstat-value"><span className="dot" /> Online</span>
-        </div>
-      </div>
 
-      {/* Pinned tools */}
+
       <section className="dash-section">
         <div className="dash-section-header">
-          <h2>Your Tools</h2>
-          <span className="dash-section-meta">{pinnedTools.length} pinned</span>
+          <h2>{t('dash.yourTools')}</h2>
+          <span className="dash-section-meta">{t('dash.pinnedCount', { count: pinnedTools.length })}</span>
         </div>
         <div className="dash-tools-grid">
-          {pinnedTools.map(t => <ToolMini key={t.id} tool={t} />)}
+          {pinnedTools.map(tl => <ToolMini key={tl.id} tool={tl} />)}
           {pinnedTools.length === 0 && (
             <div className="dash-empty">
-              Pin tools from any category to see them here.
+              {t('dash.emptyPinned')}
             </div>
           )}
         </div>
       </section>
 
-      {/* Category cards with illustrations */}
       <section className="dash-section">
         <div className="dash-section-header">
-          <h2>Explore</h2>
-          <span className="dash-section-meta">{CATEGORIES.length} categories</span>
+          <h2>{t('dash.explore')}</h2>
+          <span className="dash-section-meta">{t('dash.categoryCount', { count: CATEGORIES.length })}</span>
         </div>
         <div className="dash-cats-grid">
-          {CATEGORIES.map(cat => {
-            const tools = toolsByCategory(cat.id)
+          {lCats.map(cat => {
+            const tools = lTools.filter(tl => tl.category === cat.id)
             return (
               <NavLink key={cat.id} to={cat.path} className="cat-card">
                 <div className="cat-card-visual">
@@ -167,7 +156,7 @@ export default function Dashboard() {
                   </div>
                   <h3 className="cat-card-title">{cat.label}</h3>
                   <p className="cat-card-desc">{cat.description}</p>
-                  <span className="cat-card-count">{tools.length} {tools.length === 1 ? 'tool' : 'tools'}</span>
+                  <span className="cat-card-count">{t('dash.toolCount', { count: tools.length })}</span>
                 </div>
               </NavLink>
             )

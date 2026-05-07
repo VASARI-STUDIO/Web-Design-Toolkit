@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { generateHarmony, generateTintScale, textColorForBg, hslToHex, hexToHsl, contrastRatio, hexToRgb, luminance, T_LABELS } from '../utils/colors'
 import { usePalette } from '../contexts/PaletteContext'
+import { useI18n } from '../contexts/I18nContext'
 
 const HARMS = ['analogous', 'complement', 'triadic', 'split', 'tetradic', 'monochromatic']
 const HARM_LABELS = {
@@ -165,6 +166,7 @@ function snap(value, target, threshold = 3) {
 }
 
 export default function ColorStudio({ onCopy }) {
+  const { t } = useI18n()
   const [baseColor, setBaseColor] = useState('#2563EB')
   const [harmony, setHarmony] = useState('analogous')
   const [extraColors, setExtraColors] = useState([])
@@ -264,10 +266,10 @@ export default function ColorStudio({ onCopy }) {
     <div className="sec">
       <div style={{ marginBottom: 36 }}>
         <h1 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, letterSpacing: '-.04em', lineHeight: 1.05, marginBottom: 10 }}>
-          Color Studio
+          {t('color.title')}
         </h1>
         <p style={{ fontSize: 15, color: 'var(--t1)', maxWidth: 600, lineHeight: 1.7 }}>
-          Build complete color systems — palette, tints, contrast checks, and gradients — all in one place.
+          {t('tools.colorStudio.description')}
         </p>
       </div>
 

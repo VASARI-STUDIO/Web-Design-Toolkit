@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { usePalette } from '../contexts/PaletteContext'
+import { useI18n } from '../contexts/I18nContext'
 
 function CopyIcon({ size = 12 }) {
   return (
@@ -24,6 +25,7 @@ const TYPE_RATIOS = [
 ]
 
 export default function DesignSystemExport({ onCopy, toast }) {
+  const { t } = useI18n()
   const { palette } = usePalette()
   const [systemName, setSystemName] = useState('My Design System')
   const [author, setAuthor] = useState('')
@@ -196,9 +198,9 @@ ${spaceVars}
   return (
     <div className="sec">
       <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, letterSpacing: '-.04em', lineHeight: 1.1, marginBottom: 8 }}>Design System Export</h1>
+        <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, letterSpacing: '-.04em', lineHeight: 1.1, marginBottom: 8 }}>{t('designExport.title')}</h1>
         <p style={{ fontSize: 14, color: 'var(--t1)', maxWidth: 580, lineHeight: 1.7 }}>
-          Build your design system and export as a self-contained HTML page for developers and clients.
+          {t('tools.designExport.description')}
         </p>
       </div>
 

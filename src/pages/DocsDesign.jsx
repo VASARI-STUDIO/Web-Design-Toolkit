@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useI18n } from '../contexts/I18nContext'
 
 function DocSection({ title, icon, children }) {
   const [open, setOpen] = useState(false)
@@ -35,11 +36,12 @@ const trendIcon = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" st
 const gridIcon = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
 
 export default function DocsDesign() {
+  const { t } = useI18n()
   return (
     <div className="sec">
       <div className="sec-h">
-        <h1>Web Design Principles</h1>
-        <p>Psychology-driven principles for premium, high-converting websites. Backed by research and real-world data.</p>
+        <h1>{t('docsDesign.title')}</h1>
+        <p>{t('docsDesign.subtitle')}</p>
       </div>
 
       <DocSection title="The Halo Effect (First Impressions)" icon={eyeIcon}>

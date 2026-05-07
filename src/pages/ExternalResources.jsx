@@ -1,3 +1,5 @@
+import { useI18n } from '../contexts/I18nContext'
+
 const categories = [
   {
     title: 'Typography',
@@ -101,11 +103,12 @@ const externalIcon = (
 )
 
 export default function ExternalResources() {
+  const { t } = useI18n()
   return (
     <div className="sec">
       <div className="sec-h">
-        <h1>External Resources</h1>
-        <p>Curated links to tools, inspiration, and references for web design.</p>
+        <h1>{t('resources.title')}</h1>
+        <p>{t('resources.subtitle')}</p>
       </div>
 
       {categories.map((cat) => (
