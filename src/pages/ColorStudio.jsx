@@ -283,7 +283,7 @@ export default function ColorStudio({ onCopy }) {
             </svg>
             Random
           </button>
-          <button className="btn btn-s" onClick={addColor}>+ Add Color</button>
+          <button className="btn btn-s" onClick={addColor}>+ Add Colour</button>
         </div>
 
         {/* Base color + harmony row */}
@@ -435,7 +435,7 @@ export default function ColorStudio({ onCopy }) {
       {/* ═══ SECTION 3: UI STATE COLORS ═══ */}
       <section style={{ marginBottom: 48 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700 }}>UI State Colors</h2>
+          <h2 style={{ fontSize: 18, fontWeight: 700 }}>UI State Colours</h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--t2)' }}>Preset</span>
             {STATE_BUNDLES.map(b => (

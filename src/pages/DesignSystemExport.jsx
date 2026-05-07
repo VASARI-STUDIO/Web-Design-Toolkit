@@ -68,7 +68,7 @@ export default function DesignSystemExport({ onCopy, toast }) {
   const importFromPalette = () => {
     if (palette.length) {
       setColors([...palette])
-      setColorLabels(palette.map((_, i) => ['Primary', 'Secondary', 'Accent', 'Neutral', 'Surface'][i] || `Color ${i + 1}`))
+      setColorLabels(palette.map((_, i) => ['Primary', 'Secondary', 'Accent', 'Neutral', 'Surface'][i] || `Colour ${i + 1}`))
     }
   }
 
@@ -130,12 +130,12 @@ section h2 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 7
     </header>
 
     <section>
-      <h2>Colors</h2>
+      <h2>Colours</h2>
       <div class="color-grid">
 ${colors.map((c, i) => `        <div class="color-card">
           <div class="color-swatch" style="background: ${c}"></div>
           <div class="color-info">
-            <div class="color-name">${colorLabels[i] || 'Color ' + (i + 1)}</div>
+            <div class="color-name">${colorLabels[i] || 'Colour ' + (i + 1)}</div>
             <div class="color-hex">${c.toUpperCase()}</div>
           </div>
         </div>`).join('\n')}
@@ -232,8 +232,8 @@ ${spaceVars}
       {/* Colors */}
       <section style={{ marginBottom: 32 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700 }}>Color Tokens</h2>
-          <button className="btn btn-s" onClick={importFromPalette} style={{ fontSize: 10 }}>Import from Color Studio</button>
+          <h2 style={{ fontSize: 16, fontWeight: 700 }}>Colour Tokens</h2>
+          <button className="btn btn-s" onClick={importFromPalette} style={{ fontSize: 10 }}>Import from Colour Studio</button>
           <button className="btn btn-s" onClick={addColor} style={{ fontSize: 10 }}>+ Add</button>
         </div>
         <div className="card" style={{ padding: 16 }}>

@@ -15,7 +15,7 @@ const categories = [
     ],
   },
   {
-    title: 'Color',
+    title: 'Colour',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="13.5" cy="6.5" r="2.5" />
@@ -26,7 +26,7 @@ const categories = [
       </svg>
     ),
     links: [
-      { name: 'Tailwind Colors', desc: 'Complete color palette reference for UI design', url: 'https://tailwindcss.com/docs/colors' },
+      { name: 'Tailwind Colors', desc: 'Complete colour palette reference for UI design', url: 'https://tailwindcss.com/docs/colors' },
     ],
   },
   {

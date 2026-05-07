@@ -163,9 +163,9 @@ export default function DocsSocial() {
         <h4>Long — Free Offer</h4>
         <p><em>&quot;Is your site mobile-friendly? 60% of web traffic is mobile now. Download our FREE responsive design checklist via link in bio! 📱&quot;</em></p>
         <h4>Short — Tip</h4>
-        <p><em>&quot;Pro Tip: Buttons with contrast colors get 21% more clicks. Test it on your site today.&quot;</em></p>
+        <p><em>&quot;Pro Tip: Buttons with contrast colours get 21% more clicks. Test it on your site today.&quot;</em></p>
         <h4>Story — Engagement</h4>
-        <p><em>&quot;What&apos;s your biggest design challenge right now? Drop a 🔥 for typography, 💡 for color, ⚡ for layout.&quot;</em></p>
+        <p><em>&quot;What&apos;s your biggest design challenge right now? Drop a 🔥 for typography, 💡 for colour, ⚡ for layout.&quot;</em></p>
         <h4>Carousel — Educational</h4>
         <p><em>Slide 1: &quot;5 design mistakes killing your conversions&quot; → Slides 2-5: one mistake each with visual → Slide 6: CTA to your service</em></p>
       </DocSection>
@@ -243,9 +243,9 @@ export default function DocsSocial() {
           <li>1 font family maximum per carousel (2 weights: bold + regular)</li>
           <li>Left-aligned text reads faster than centered</li>
         </ul>
-        <h4>Color for feeds</h4>
+        <h4>Colour for feeds</h4>
         <ul>
-          <li>Stick to 2–3 brand colors for a cohesive grid</li>
+          <li>Stick to 2–3 brand colours for a cohesive grid</li>
           <li>High saturation performs better on Instagram (the algorithm favors engagement)</li>
           <li>Dark backgrounds with light text stop the scroll more effectively</li>
           <li>Avoid pure white backgrounds — they blend with the app&apos;s UI</li>
