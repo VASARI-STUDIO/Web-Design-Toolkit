@@ -92,20 +92,25 @@ export default function Sidebar({ isOpen, onClose }) {
             const isOpen = !!openCats[cat.id]
             const isActive = activeCategoryId === cat.id
             const tools = allTools.filter(tl => tl.category === cat.id)
+            const hasSubItems = tools.length > 1 || (tools.length === 1 && tools[0].path !== cat.path)
             return (
               <div key={cat.id} className={`nav-cat${isActive ? ' active' : ''}`}>
                 <div className="nav-cat-header">
-                  <button
-                    type="button"
-                    className="nav-cat-toggle"
-                    onClick={() => toggleCat(cat.id)}
-                    aria-expanded={isOpen}
-                    aria-label={t('nav.toggle', { name: cat.label })}
-                  >
-                    <svg className={`nav-cat-arr${isOpen ? ' open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="9 6 15 12 9 18" />
-                    </svg>
-                  </button>
+                  {hasSubItems ? (
+                    <button
+                      type="button"
+                      className="nav-cat-toggle"
+                      onClick={() => toggleCat(cat.id)}
+                      aria-expanded={isOpen}
+                      aria-label={t('nav.toggle', { name: cat.label })}
+                    >
+                      <svg className={`nav-cat-arr${isOpen ? ' open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 6 15 12 9 18" />
+                      </svg>
+                    </button>
+                  ) : (
+                    <div style={{ width: 20 }} />
+                  )}
                   <NavLink
                     to={cat.path}
                     className={({ isActive: linkActive }) => `nav-cat-link${linkActive ? ' active' : ''}`}
@@ -118,19 +123,21 @@ export default function Sidebar({ isOpen, onClose }) {
                     <span className="nav-cat-label">{cat.label}</span>
                   </NavLink>
                 </div>
-                <div className={`nav-cat-body${isOpen ? ' open' : ''}`}>
-                  {tools.map((tool, ti) => (
-                    <NavLink
-                      key={tool.id}
-                      to={tool.path}
-                      className={({ isActive: linkActive }) => `nav-item nav-item-sub${linkActive ? ' active' : ''}`}
-                      onClick={onClose}
-                    >
-                      <span className="nav-item-num">{idx + 1}.{ti + 1}</span>
-                      <span className="nav-item-label">{tool.label}</span>
-                    </NavLink>
-                  ))}
-                </div>
+                {tools.length > 1 || (tools.length === 1 && tools[0].path !== cat.path) ? (
+                  <div className={`nav-cat-body${isOpen ? ' open' : ''}`}>
+                    {tools.map((tool, ti) => (
+                      <NavLink
+                        key={tool.id}
+                        to={tool.path}
+                        className={({ isActive: linkActive }) => `nav-item nav-item-sub${linkActive ? ' active' : ''}`}
+                        onClick={onClose}
+                      >
+                        <span className="nav-item-num">{idx + 1}.{ti + 1}</span>
+                        <span className="nav-item-label">{tool.label}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             )
           })}
