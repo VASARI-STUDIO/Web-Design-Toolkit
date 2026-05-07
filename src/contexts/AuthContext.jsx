@@ -1,81 +1,122 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  sendPasswordResetEmail,
-  updateProfile
-} from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
-import { auth, googleProvider, db } from '../utils/firebase'
+import { createContext, useContext, useState, useCallback } from 'react'
 
 const AuthContext = createContext()
+const USERS_KEY = 'vs-users'
+const SESSION_KEY = 'vs-session'
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}') } catch { return {} }
+}
+function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)) }
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)) } catch { return null }
+}
+function saveSession(s) { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY) }
+
+function hashPassword(p) {
+  let h = 0
+  for (let i = 0; i < p.length; i++) h = ((h << 5) - h + p.charCodeAt(i)) | 0
+  return 'h_' + Math.abs(h).toString(36)
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [userProfile, setUserProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [session, setSession] = useState(getSession)
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser)
-      if (firebaseUser) {
-        try {
-          const profileDoc = await getDoc(doc(db, 'users', firebaseUser.uid))
-          if (profileDoc.exists()) {
-            setUserProfile(profileDoc.data())
-          } else {
-            const newProfile = {
-              displayName: firebaseUser.displayName || '',
-              email: firebaseUser.email,
-              photoURL: firebaseUser.photoURL || '',
-              tier: 'free',
-              createdAt: new Date().toISOString()
-            }
-            await setDoc(doc(db, 'users', firebaseUser.uid), newProfile)
-            setUserProfile(newProfile)
-          }
-        } catch {
-          // Firestore may not be configured yet — fall back to local profile
-          setUserProfile({
-            displayName: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
-            email: firebaseUser.email,
-            photoURL: firebaseUser.photoURL || '',
-            tier: 'free'
-          })
-        }
-      } else {
-        setUserProfile(null)
-      }
-      setLoading(false)
-    })
-    return unsub
+  const user = session ? { email: session.email, uid: session.uid } : null
+  const userProfile = session ? {
+    displayName: session.displayName || session.email?.split('@')[0] || 'User',
+    email: session.email,
+    photoURL: session.photoURL || '',
+    tier: session.tier || 'free',
+  } : null
+
+  const login = useCallback(async (email, password) => {
+    const users = getUsers()
+    const key = email.toLowerCase()
+    const u = users[key]
+    if (!u) throw { code: 'auth/user-not-found' }
+    if (u.passwordHash !== hashPassword(password)) throw { code: 'auth/wrong-password' }
+    const s = { email: u.email, uid: u.uid, displayName: u.displayName, photoURL: u.photoURL, tier: u.tier }
+    saveSession(s)
+    setSession(s)
   }, [])
 
-  const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
+  const signup = useCallback(async (email, password, displayName) => {
+    const users = getUsers()
+    const key = email.toLowerCase()
+    if (users[key]) throw { code: 'auth/email-already-in-use' }
+    const uid = 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)
+    const u = { email, uid, displayName: displayName || '', photoURL: '', tier: 'free', passwordHash: hashPassword(password), createdAt: new Date().toISOString() }
+    users[key] = u
+    saveUsers(users)
+    const s = { email: u.email, uid, displayName: u.displayName, photoURL: '', tier: 'free' }
+    saveSession(s)
+    setSession(s)
+  }, [])
 
-  const signup = async (email, password, displayName) => {
-    const cred = await createUserWithEmailAndPassword(auth, email, password)
-    if (displayName) {
-      await updateProfile(cred.user, { displayName })
-    }
-    return cred
-  }
+  const logout = useCallback(() => { saveSession(null); setSession(null) }, [])
 
-  const loginWithGoogle = () => signInWithPopup(auth, googleProvider)
+  const resetPassword = useCallback(async (email) => {
+    const users = getUsers()
+    if (!users[email.toLowerCase()]) throw { code: 'auth/user-not-found' }
+  }, [])
 
-  const logout = () => signOut(auth)
+  const updateDisplayName = useCallback((newName) => {
+    if (!session) return
+    const users = getUsers()
+    const key = session.email.toLowerCase()
+    if (users[key]) { users[key].displayName = newName; saveUsers(users) }
+    const s = { ...session, displayName: newName }
+    saveSession(s)
+    setSession(s)
+  }, [session])
 
-  const resetPassword = (email) => sendPasswordResetEmail(auth, email)
+  const updateEmail = useCallback((newEmail, password) => {
+    if (!session) throw { code: 'auth/requires-recent-login' }
+    const users = getUsers()
+    const oldKey = session.email.toLowerCase()
+    const newKey = newEmail.toLowerCase()
+    if (oldKey !== newKey && users[newKey]) throw { code: 'auth/email-already-in-use' }
+    const u = users[oldKey]
+    if (!u || u.passwordHash !== hashPassword(password)) throw { code: 'auth/wrong-password' }
+    delete users[oldKey]
+    u.email = newEmail
+    users[newKey] = u
+    saveUsers(users)
+    const s = { ...session, email: newEmail }
+    saveSession(s)
+    setSession(s)
+  }, [session])
+
+  const updatePassword = useCallback((currentPassword, newPassword) => {
+    if (!session) throw { code: 'auth/requires-recent-login' }
+    const users = getUsers()
+    const key = session.email.toLowerCase()
+    const u = users[key]
+    if (!u || u.passwordHash !== hashPassword(currentPassword)) throw { code: 'auth/wrong-password' }
+    u.passwordHash = hashPassword(newPassword)
+    saveUsers(users)
+  }, [session])
+
+  const deleteAccount = useCallback((password) => {
+    if (!session) return
+    const users = getUsers()
+    const key = session.email.toLowerCase()
+    const u = users[key]
+    if (!u || u.passwordHash !== hashPassword(password)) throw { code: 'auth/wrong-password' }
+    delete users[key]
+    saveUsers(users)
+    saveSession(null)
+    setSession(null)
+  }, [session])
 
   const isProUser = () => userProfile?.tier === 'pro'
 
   return (
     <AuthContext.Provider value={{
-      user, userProfile, loading,
-      login, signup, loginWithGoogle, logout, resetPassword,
+      user, userProfile, loading: false,
+      login, signup, logout, resetPassword,
+      updateDisplayName, updateEmail, updatePassword, deleteAccount,
       isProUser
     }}>
       {children}
