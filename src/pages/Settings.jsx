@@ -150,7 +150,7 @@ function DeleteAccount({ onDelete }) {
 }
 
 export default function Settings({ toast }) {
-  const { user, userProfile, logout, updateDisplayName, updateEmail, updatePassword, deleteAccount } = useAuth()
+  const { user, userProfile, logout, updateProfile, updateEmail, updatePassword, deleteAccount } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const { t, lang, setLang, languages } = useI18n()
 
@@ -237,11 +237,11 @@ export default function Settings({ toast }) {
               <button className="btn btn-s" onClick={logout}>{t('common.signOut')}</button>
             </div>
 
-            {/* Editable fields */}
+            {/* Profile fields */}
             <EditField
               label="Display Name"
               value={userProfile?.displayName}
-              onSave={(name) => { updateDisplayName(name); toast('Display name updated') }}
+              onSave={(v) => { updateProfile({ displayName: v }); toast('Display name updated') }}
               placeholder="Enter your display name"
             />
 
@@ -256,6 +256,35 @@ export default function Settings({ toast }) {
                 toast('Email updated')
               }}
               placeholder="Enter new email"
+            />
+
+            <EditField
+              label="Location"
+              value={userProfile?.location}
+              onSave={(v) => { updateProfile({ location: v }); toast('Location updated') }}
+              placeholder="e.g. Melbourne, Australia"
+            />
+
+            <EditField
+              label="Company / Studio"
+              value={userProfile?.company}
+              onSave={(v) => { updateProfile({ company: v }); toast('Company updated') }}
+              placeholder="e.g. Vasari Design Studio"
+            />
+
+            <EditField
+              label="Website"
+              value={userProfile?.website}
+              type="url"
+              onSave={(v) => { updateProfile({ website: v }); toast('Website updated') }}
+              placeholder="https://yoursite.com"
+            />
+
+            <EditField
+              label="Bio"
+              value={userProfile?.bio}
+              onSave={(v) => { updateProfile({ bio: v }); toast('Bio updated') }}
+              placeholder="A short bio about yourself"
             />
 
             <PasswordChange onSave={(current, next) => updatePassword(current, next)} />

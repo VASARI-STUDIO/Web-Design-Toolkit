@@ -28,6 +28,10 @@ export function AuthProvider({ children }) {
     email: session.email,
     photoURL: session.photoURL || '',
     tier: session.tier || 'free',
+    location: session.location || '',
+    website: session.website || '',
+    bio: session.bio || '',
+    company: session.company || '',
   } : null
 
   const login = useCallback(async (email, password) => {
@@ -61,15 +65,19 @@ export function AuthProvider({ children }) {
     if (!users[email.toLowerCase()]) throw { code: 'auth/user-not-found' }
   }, [])
 
-  const updateDisplayName = useCallback((newName) => {
+  const updateProfile = useCallback((fields) => {
     if (!session) return
     const users = getUsers()
     const key = session.email.toLowerCase()
-    if (users[key]) { users[key].displayName = newName; saveUsers(users) }
-    const s = { ...session, displayName: newName }
+    if (users[key]) { Object.assign(users[key], fields); saveUsers(users) }
+    const s = { ...session, ...fields }
     saveSession(s)
     setSession(s)
   }, [session])
+
+  const updateDisplayName = useCallback((newName) => {
+    updateProfile({ displayName: newName })
+  }, [updateProfile])
 
   const updateEmail = useCallback((newEmail, password) => {
     if (!session) throw { code: 'auth/requires-recent-login' }
@@ -116,7 +124,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider value={{
       user, userProfile, loading: false,
       login, signup, logout, resetPassword,
-      updateDisplayName, updateEmail, updatePassword, deleteAccount,
+      updateProfile, updateDisplayName, updateEmail, updatePassword, deleteAccount,
       isProUser
     }}>
       {children}
