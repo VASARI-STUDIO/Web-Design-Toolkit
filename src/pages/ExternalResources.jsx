@@ -40,6 +40,7 @@ const categories = [
     ),
     links: [
       { name: 'Google Veo', desc: 'AI-powered video and effects generation', url: 'https://labs.google/fx/tools/flow' },
+      { name: 'Kling AI', desc: 'AI image and video generation with creative controls', url: 'https://kling.ai/app' },
       { name: 'Higgsfield', desc: 'Create cinematic AI videos from text', url: 'https://higgsfield.ai/' },
     ],
   },
