@@ -9,10 +9,6 @@ import { useClipboard } from './hooks/useClipboard'
 
 import Dashboard from './pages/Dashboard'
 import ColorStudio from './pages/ColorStudio'
-import PaletteBuilder from './pages/PaletteBuilder'
-import TintGenerator from './pages/TintGenerator'
-import GradientTool from './pages/GradientTool'
-import ContrastChecker from './pages/ContrastChecker'
 import TypeScale from './pages/TypeScale'
 import FontMatcher from './pages/FontMatcher'
 import IconLibrary from './pages/IconLibrary'
@@ -29,7 +25,7 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import CategoryDashboard from './pages/CategoryDashboard'
 import DesignReference from './pages/DesignReference'
-import DesignSystemExport from './pages/DesignSystemExport'
+import VideoToFrames from './pages/VideoToFrames'
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -63,15 +59,16 @@ export default function App() {
         <main className="main">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/color" element={<CategoryDashboard categoryId="color" />} />
+            <Route path="/color" element={<ColorStudio onCopy={copy} toast={toast} />} />
             <Route path="/typography" element={<CategoryDashboard categoryId="typography" />} />
             <Route path="/imagery" element={<CategoryDashboard categoryId="imagery" />} />
             <Route path="/docs" element={<CategoryDashboard categoryId="documentation" />} />
-            <Route path="/color-studio" element={<ColorStudio onCopy={copy} />} />
-            <Route path="/palette" element={<PaletteBuilder onCopy={copy} />} />
-            <Route path="/tints" element={<TintGenerator onCopy={copy} />} />
-            <Route path="/gradients" element={<GradientTool onCopy={copy} />} />
-            <Route path="/contrast" element={<ContrastChecker />} />
+            <Route path="/color-studio" element={<Navigate to="/color" replace />} />
+            <Route path="/palette" element={<Navigate to="/color" replace />} />
+            <Route path="/tints" element={<Navigate to="/color" replace />} />
+            <Route path="/gradients" element={<Navigate to="/color" replace />} />
+            <Route path="/contrast" element={<Navigate to="/color" replace />} />
+            <Route path="/export" element={<Navigate to="/color" replace />} />
             <Route path="/typescale" element={<TypeScale onCopy={copy} />} />
             <Route path="/fontpairs" element={<FontMatcher onCopy={copy} />} />
             <Route path="/icons" element={<IconLibrary onCopy={copy} />} />
@@ -79,8 +76,8 @@ export default function App() {
             <Route path="/prompts" element={<PromptLibrary onCopy={copy} toast={toast} />} />
             <Route path="/docs-design" element={<DocsDesign />} />
             <Route path="/docs-social" element={<DocsSocial />} />
+            <Route path="/video-frames" element={<VideoToFrames toast={toast} />} />
             <Route path="/design-reference" element={<DesignReference onCopy={copy} />} />
-            <Route path="/export" element={<DesignSystemExport onCopy={copy} toast={toast} />} />
             <Route path="/resources" element={<ExternalResources />} />
             <Route path="/login" element={<Login toast={toast} />} />
             <Route path="/settings" element={<Settings toast={toast} />} />

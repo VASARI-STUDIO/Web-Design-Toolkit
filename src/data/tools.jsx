@@ -74,7 +74,7 @@ const TOOL_I18N_MAP = {
   'docs-design': 'tools.docsDesign',
   'docs-social': 'tools.docsSocial',
   'design-reference': 'tools.designReference',
-  'export': 'tools.designExport',
+  'video-frames': 'tools.videoFrames',
   'resources': 'tools.externalResources',
 }
 
@@ -84,10 +84,10 @@ export const TOOLS = [
   { id: 'fontpairs', label: 'Font Pair Finder', path: '/fontpairs', category: 'typography', description: 'Curated font pairings for headlines and body.', keywords: ['font', 'pair', 'pairing', 'typography', 'google fonts'] },
   { id: 'icons', label: 'Icon Library', path: '/icons', category: 'imagery', description: 'Search thousands of icons via Iconify API.', keywords: ['icon', 'svg', 'symbol', 'iconify'] },
   { id: 'imgconvert', label: 'Image Converter', path: '/imgconvert', category: 'imagery', description: 'Convert, compress and resize images locally.', keywords: ['image', 'convert', 'compress', 'resize', 'webp', 'png', 'jpg'] },
+  { id: 'video-frames', label: 'Video to Frames', path: '/video-frames', category: 'imagery', description: 'Extract frames from video as images with scaling and compression controls.', keywords: ['video', 'frames', 'extract', 'screenshot', 'capture', 'export'] },
   { id: 'docs-design', label: 'Design Principles', path: '/docs-design', category: 'documentation', description: 'Visual hierarchy, balance, and design psychology.', keywords: ['design', 'principles', 'theory', 'documentation'] },
   { id: 'docs-social', label: 'Social & Marketing', path: '/docs-social', category: 'documentation', description: 'Social media and marketing best practices.', keywords: ['social', 'marketing', 'content', 'documentation'] },
   { id: 'design-reference', label: 'Design Reference', path: '/design-reference', category: 'documentation', description: 'Spacing, shadows, radii, font scales, and design token reference.', keywords: ['tailwind', 'spacing', 'shadow', 'radius', 'tokens', 'reference', 'cheat sheet'] },
-  { id: 'export', label: 'Design System Export', path: '/export', category: 'documentation', description: 'Export your complete design system as HTML for developers and clients.', keywords: ['export', 'design system', 'html', 'tokens', 'handoff', 'developer'] },
   { id: 'resources', label: 'External Resources', path: '/resources', category: 'documentation', description: 'Curated links to fonts, colours, AI tools, and inspiration.', keywords: ['resources', 'links', 'external', 'google fonts', 'tailwind', 'framer', 'awwwards'] },
 ]
 

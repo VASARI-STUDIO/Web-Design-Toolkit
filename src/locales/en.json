@@ -133,6 +133,10 @@
       "label": "Design System Export",
       "description": "Export your complete design system as HTML for developers and clients."
     },
+    "videoFrames": {
+      "label": "Video to Frames",
+      "description": "Extract individual frames from video files as high-quality images."
+    },
     "externalResources": {
       "label": "External Resources",
       "description": "Curated links to fonts, colours, AI tools, and inspiration."
