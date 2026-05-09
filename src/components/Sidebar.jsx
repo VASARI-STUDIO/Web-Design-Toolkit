@@ -116,14 +116,14 @@ export default function Sidebar({ isOpen, onClose }) {
                     className={({ isActive: linkActive }) => `nav-cat-link${linkActive ? ' active' : ''}`}
                     onClick={onClose}
                   >
-                    <span className="nav-cat-num">{idx + 1}</span>
+                    {hasSubItems && <span className="nav-cat-num">{idx + 1}</span>}
                     <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                       {cat.icon}
                     </svg>
                     <span className="nav-cat-label">{cat.label}</span>
                   </NavLink>
                 </div>
-                {tools.length > 1 || (tools.length === 1 && tools[0].path !== cat.path) ? (
+                {hasSubItems && (
                   <div className={`nav-cat-body${isOpen ? ' open' : ''}`}>
                     {tools.map((tool, ti) => (
                       <NavLink
@@ -137,7 +137,7 @@ export default function Sidebar({ isOpen, onClose }) {
                       </NavLink>
                     ))}
                   </div>
-                ) : null}
+                )}
               </div>
             )
           })}
