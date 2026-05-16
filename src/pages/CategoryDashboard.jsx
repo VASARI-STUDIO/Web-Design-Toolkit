@@ -31,7 +31,7 @@ const QUICK_ACTIONS = {
   typography: [
     { label: 'Modular scale', desc: 'Minor third, perfect fourth, etc.', to: '/typescale' },
     { label: 'Heading + body pair', desc: 'Curated combinations', to: '/fontpairs' },
-    { label: 'Variable font weights', desc: 'See the full range live', to: '/fontpairs' },
+    { label: 'Browse font gallery', desc: 'Visual typeface showcase', to: '/fontgallery' },
     { label: 'CSS export', desc: 'Drop-in custom properties', to: '/typescale' },
   ],
   imagery: [

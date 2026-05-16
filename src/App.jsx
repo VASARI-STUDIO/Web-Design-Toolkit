@@ -30,6 +30,7 @@ import DesignReference from './pages/DesignReference'
 import VideoToFrames from './pages/VideoToFrames'
 import Admin from './pages/Admin'
 import Projects from './pages/Projects'
+import FontGallery from './pages/FontGallery'
 
 function RequireAuth({ children }) {
   const { user } = useAuth()
@@ -99,6 +100,7 @@ export default function App() {
             <Route path="/export" element={<Navigate to="/color" replace />} />
             <Route path="/typescale" element={<TypeScale onCopy={copy} />} />
             <Route path="/fontpairs" element={<FontMatcher onCopy={copy} toast={toast} />} />
+            <Route path="/fontgallery" element={<FontGallery onCopy={copy} />} />
             <Route path="/icons" element={<IconLibrary onCopy={copy} />} />
             <Route path="/imgconvert" element={<ImageConverter toast={toast} />} />
             <Route path="/prompts" element={<PromptLibrary onCopy={copy} toast={toast} />} />
