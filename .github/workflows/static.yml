@@ -46,6 +46,7 @@ jobs:
         working-directory: prod-src
         env:
           VITE_BASE: /
+          VITE_GOOGLE_FONTS_API_KEY: ${{ secrets.VITE_GOOGLE_FONTS_API_KEY }}
         run: npm run build
 
       # ─── Build PREVIEW (claude/redesign-layout-google-auth-PUSyT → /test/) ───
@@ -63,6 +64,7 @@ jobs:
         working-directory: preview-src
         env:
           VITE_BASE: /test/
+          VITE_GOOGLE_FONTS_API_KEY: ${{ secrets.VITE_GOOGLE_FONTS_API_KEY }}
         run: npm run build
 
       # ─── Combine into one deploy ───
